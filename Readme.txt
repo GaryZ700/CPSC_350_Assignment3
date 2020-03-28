@@ -1,4 +1,4 @@
-Identifiying Information:
+1. Identifiying Information:
 	a. Gary Zeri
 	b. Student ID: 2321569
 	c. zeri@chapman.edu
@@ -17,6 +17,12 @@ Identifiying Information:
 	http://peterforgacs.github.io/2017/06/25/Custom-C-Exceptions-For-Beginners/		
 	https://www.fluentcpp.com/2018/06/15/should-structs-have-constructors-in-cpp
 	http://www.cplusplus.com/reference/string/string/c_str/
+	https://www.learncpp.com/cpp-tutorial/chars/
+	https://stackoverflow.com/questions/161790/initialize-a-const-array-in-a-class-initializer-in-c/
+	https://www.cplusplus.com/reference/regex/
+	https://www.cplusplus.com/reference/istream/get/
+	https://www.cplusplus.com/reference/ios/ios/eof/
+	https://www.tutorialspoint.com/cplusplus/cpp_return_pointer_from_functions.htm
 
 5. Instructions for running the assignment
 	1.) Run "make"

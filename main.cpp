@@ -8,16 +8,18 @@
 
 #include <fstream>
 #include "menu.h"
-#include "gen_stack.h"
+#include "syntax_analyzer.h"
 #include "assignment3_string_constants.h"
 
 using namespace std;
 
 int main(int argc, char** argv){
 
+	bool correctDelimiterSyntax;
 	bool firstRun = true;
 	fstream codeFile;
 	UserInput input;
+	SyntaxAnalyzer syntaxAnalyzer;
 
 	//if the user did not provide a command line argument 
 	//prompt the user to input one
@@ -32,7 +34,9 @@ int main(int argc, char** argv){
 		//then prompt for another file name
 		if(!firstRun)
 			codeFile = input.GetFile(kGetFile, kBadFileName, ios::in);
-	
+		else
+			firstRun = false;
 
-	}while(input.GetBool(kRepeatProgram, kYes, kNo));
+		correctDelimiterSyntax = syntaxAnalyzer.Analyze(codeFile);		
+	}while(correctDelimiterSyntax && input.GetBool(kRepeatProgram, kYes, kNo));
 }

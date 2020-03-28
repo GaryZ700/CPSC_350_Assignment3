@@ -58,7 +58,7 @@ GenStack<T>::GenStack(int maxSize, int incrementSize){
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-/*GenStack Deconstructor*/
+/*Generic Stack Deconstructor*/
 template <class T>
 GenStack<T>::~GenStack(){
 	delete[] data;
@@ -67,7 +67,7 @@ GenStack<T>::~GenStack(){
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 /*GenStack Push Method
-  Pushed the provided object onto the Stack*/
+  Pushes the provided obj onto the Stack*/
 template <class T>
 void GenStack<T>::Push(T obj){
 
@@ -97,6 +97,9 @@ int GenStack<T>::Size(){
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+/*Pop Method 
+  Returns the top most obj in the stack, and also removes it from the stack
+  Will throw an exception if the stack is empty*/
 template <class T>
 T GenStack<T>::Pop(){
 
@@ -108,6 +111,8 @@ T GenStack<T>::Pop(){
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+/*Top Method
+  Returns the top most object from the stack without removing it*/
 template <class T>
 T GenStack<T>::Top(){
 	return data[size-1];
@@ -115,6 +120,8 @@ T GenStack<T>::Top(){
 
 //---------------------------------------------------------------------------------
 
+/*IncreaseSize Method
+  Incrases the size of the Stack by teh incrementSize*/
 template <class T>
 void GenStack<T>::IncreaseSize(){
 
