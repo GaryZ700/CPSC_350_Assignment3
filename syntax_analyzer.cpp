@@ -12,20 +12,14 @@ using namespace std;
 
 /*Syntax Analyzer Constructor*/
 SyntaxAnalyzer::SyntaxAnalyzer(){
-	this->delimiterData.left = new GenStack<char>();
-	this->delimiterData.right = new GenStack<char>();
-	this->delimiterData.leftLineNumbers = new GenStack<int>();
-	this->delimiterData.rightLineNumbers = new GenStack<int>();
+	this->leftDelimiters = new GenStack<char>;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 /*SyntaxAnalyzer Deconstructor Function*/
 SyntaxAnalyzer::~SyntaxAnalyzer(){
-	delete delimiterData.left;
-	delete delimiterData.right;
-	delete delimiterData.leftLineNumbers;
-	delete delimiterData.rightLineNumbers;
+	delete leftDelimiters;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -34,49 +28,34 @@ SyntaxAnalyzer::~SyntaxAnalyzer(){
   Returns a bool representing whether the delmiter syntax in the provided file is correct
   codeFile: fstream to the code file to analyze*/
 bool SyntaxAnalyzer::Analyze(fstream &codeFile){
-
+	
+	bool correctSyntax = true;
 	int lineNumber = 1;
 	int delimiterCode;
 	char codeChar;
+
+	codeFile.get(codeChar);
 		
-	while(codeFile.get(codeChar)){
-		
+	do{	
 		delimiterCode = IsDelimiter(codeChar);
 	 
-		//check whether or not the main logic applies
+		//check whether or not a delimiter is being delt with
 		if(delimiterCode == -1){
 			if(codeChar == '\n')
 				++lineNumber;
 			continue;
 		}
+
+		correctSyntax = CoreLogic(codeChar, delimiterCode, lineNumber); 
 		
-		if(CoreLogic(codeChar, delimiterCode, lineNumber) == false)
-			return false;
-	}
+	}while( correctSyntax && codeFile.get(codeChar));
 
-	//check if there were no ending delimiters
-	if(delimiterData.left->Size() > 0){
-		cout << "Error, End of File Reached: Expecting ending delimiter for '" << delimiterData.left->Pop() << "'" << endl;
-		return false;
-	}
+	//Case where there is a starting delimiter with no ending delmiter, ex. Has '[' but missing ']'
+	if(correctSyntax && leftDelimiters->Size() > 0)
+		correctSyntax = ErrorMessage(leftDelimiters->Pop(), ' ', lineNumber);
+
 	
-	//run core logic again to check the last set of delimiters to ensure that they are correct	
-	return true;
-}
-
-//---------------------------------------------------------------------------------
-
-/*AddDelmiter Method
-  Has a void return
-  codeChar: char representing the character to add as a delimiter
-  delimiterCode: int representing whether the delimiter is either a left or right delimiter
-  lineNumber: int that represents the line where codeChar was located*/
-void SyntaxAnalyzer::AddDelimiter(char codeChar, int delimiterCode, int lineNumber){
-
-	if(delimiterCode == 0)
-		delimiterData.left->Push(codeChar);	
-	else if(delimiterCode == 1)
-		delimiterData.right->Push(codeChar);
+	return correctSyntax;
 }
 
 //---------------------------------------------------------------------------------
@@ -98,9 +77,9 @@ void SyntaxAnalyzer::DelimiterSearch(char codeChar, int &delimiterCode, int &ind
 	//perform a binary search on the delimiters string in order to check if the test char is a valid delmiter
 	while(index >= 0 && index <= 5 && lastIndex != index){
 
-		//get last index every other cycle to check if 
+		 //get last index every other cycle to check if 
 		//there is an inbetween value that results in
-		//"bouncing "between two indexes 
+		//"bouncing" between two indexes 
 		if(index %2 == 0)
 			lastIndex = index;
 
@@ -139,6 +118,7 @@ int SyntaxAnalyzer::IsDelimiter(char codeChar){
   Returns a char that is the opposite delimiter for the provided codeChar, returns -1 if invalid delimiter is provided
   codeChar: delimiterChar whose opposite is to be found*/
 char SyntaxAnalyzer::OppositeDelimiter(char codeChar){
+	
 	int delimiterCode;
 	int index;
 
@@ -149,46 +129,55 @@ char SyntaxAnalyzer::OppositeDelimiter(char codeChar){
 
 //---------------------------------------------------------------------------------
 
-/*ReverseDelimiterStack Methods
-  Returns a pointer to a reversed char GenStack
-  delimiterStack: char GenStack that is to be reversed, is pass by copy to allow the reversal occur without affecting the original stack object*/
-GenStack<DelimiterData>* SyntaxAnalyzer::ReverseDelimiterStack(GenStack<DelimiterData> delimiterStack){
-	
-	GenStack<DelimiterData> *reversedDelimiterStack = new GenStack<DelimiterData>(delimiterStack.Size());
-	
-	while(!delimiterStack.Empty())	
-		reversedDelimiterStack->Push(delimiterStack.Pop());
-
-	return reversedDelimiterStack;
-}
-
-//---------------------------------------------------------------------------------
-
 /*CoreLogic Function, has main core logic for determining if there is a delimiter syntax error
   Returns a bool representing whether or not there is a delimiter syntax error present in the code
   */
 bool SyntaxAnalyzer::CoreLogic(char codeChar, int delimiterCode, int lineNumber){
 	
 	//for left side delimiters
-	if(delimiterCode == 0){
-		delimiterData.left->Push(codeChar);
-		delimiterData.leftLineNumbers->Push(lineNumber);	
-	}
+	if(delimiterCode == 0)
+		leftDelimiters->Push(codeChar);
 
 	//for right side delimiters
 	else if(delimiterCode == 1){
-		
-		if(delimiterData.left->Empty()){	
-			cout << "Error, Line Number: " << lineNumber << ": '" << codeChar << "' found without starting delimiter." << endl;
-			return false;
-		}
-		
-		char leftDelimiter = delimiterData.left->Pop();
-		if(codeChar != OppositeDelimiter(leftDelimiter)){
-			cout << "Error, Line Number: " << lineNumber << ": Expecting ending delimiter for '" << leftDelimiter << "', but found '" << codeChar << "'" << endl;
-			return false; 
-		} 
+
+		//case where there is a right delimiter with no left delimiter, ex. a random ']' without a starting '['		
+		if(leftDelimiters->Empty())
+			return ErrorMessage(' ', codeChar, lineNumber);
+	
+		//case where expecting a certain ending delimiter but another is found, ex. expecting ']' but found '}' instead	
+		char leftDelimiter = leftDelimiters->Pop();
+		if(codeChar != OppositeDelimiter(leftDelimiter))
+			return ErrorMessage(leftDelimiter, codeChar, lineNumber); 
 	}
 
 	return true;
+}
+
+//---------------------------------------------------------------------------------
+
+/*ErrorMessage Function 
+  Always returns false to represent that a syntax error was found
+  leftDelimiter: char that represents the left delimiter
+  rightDelimiter: char that represents the right delimiter
+  lineNumber: int that represents the line where the error occured
+*/
+bool SyntaxAnalyzer::ErrorMessage(char leftDelimiter, char rightDelimiter, int lineNumber){
+
+	cout << endl;
+		
+	if(rightDelimiter == ' ')
+		cout << "Error, End of File Reached: Expecting '" << OppositeDelimiter(leftDelimiter) << "' on line " << lineNumber;
+	else{
+		cout << "Error, Line Number " << lineNumber << ": ";
+		
+		if(leftDelimiter == ' ')
+			cout << "Found '" << rightDelimiter << "' without starting '" << OppositeDelimiter(rightDelimiter) << "'";
+		else
+			cout << ": Expecting ending delimiter for '" << leftDelimiter << "', but found '" << rightDelimiter << "'";
+	}
+	
+	cout << "." << endl << endl;
+
+	return false;
 }

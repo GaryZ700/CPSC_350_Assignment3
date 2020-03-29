@@ -6,9 +6,22 @@
 	e. Assignment 3: Syntax Checker
 
 2. List of Source Files
-	1.  Makefile
+	1.)  Makefile
+	2.)  Readme.txt
+	3.)  assignment3_string_constants.h
+	4.)  gen_stack.h
+	5.)  gen_stack_exceptions.h
+	6.)  menu.h
+	7.)  user_input.h
+	8.)  syntax_analyzer.h
+	9.)  menu.cpp
+	10.) user_input.cpp
+	11.) syntax_analyzer.cpp
+	
 
 3. Description of any known compile/runtime errors:
+	None known, but reading of corrupted or non-text files may result in the program crashing. Also, reading files that 
+corrupt while being read, or during a harddrive/solidstate drive failure may also result in the program crashing. 
 
 4. References used to complete the assignment:
 	Class Lectures
@@ -26,4 +39,4 @@
 
 5. Instructions for running the assignment
 	1.) Run "make"
-	2.) Run "./assignment3.exe"
+	2.) Run "./assignment3.exe" followed by the command line parameter of the code file whose delimiter syntax is to be verified
