@@ -30,8 +30,10 @@ class SyntaxAnalyzer{
 		DelimiterData delimiterData;
 		char delimiters[6] = {'(', ')', '[', ']', '{', '}'};	
 		
-		void AddDelimiter(char codeChar, int delimiterCode);
+		void AddDelimiter(char codeChar, int delimiterCode, int lineNumber);
+		void DelimiterSearch(char codeChar, int &delimiterCode, int &index);
 		int IsDelimiter(char codeChar);
+		char OppositeDelimiter(char codeChar);
 		GenStack<DelimiterData>* ReverseDelimiterStack(GenStack<DelimiterData> delimiterStack);
 		bool CoreLogic(char codeChar, int delimiterCode, int lineNumber);
 };
