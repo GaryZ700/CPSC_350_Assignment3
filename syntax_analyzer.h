@@ -14,6 +14,7 @@
 #include <regex>
 #include "gen_stack.h"
 #include "assignment3_string_constants.h"
+#include "delimiter_data.h"
 
 using namespace std;
 
@@ -24,15 +25,15 @@ class SyntaxAnalyzer{
 		~SyntaxAnalyzer();
 		
 		bool Analyze(fstream &codeFile);
-	private:
-		char delimiters[6] = {'(', ')', '[', ']', '{', '}'};		
-		GenStack<char> *leftDelimiters;
-		GenStack<char> *rightDelimiters;
-		GenStack<char> *reverseRightDelimiters;
+
+	private:	
+		DelimiterData delimiterData;
+		char delimiters[6] = {'(', ')', '[', ']', '{', '}'};	
 		
-		void AddDelimiter(char testChar);
-		int IsDelimiter(char testChar);
-		GenStack<char>* ReverseDelimiterStack(GenStack<char> delimiterStack);
+		void AddDelimiter(char codeChar, int delimiterCode);
+		int IsDelimiter(char codeChar);
+		GenStack<DelimiterData>* ReverseDelimiterStack(GenStack<DelimiterData> delimiterStack);
+		bool CoreLogic(char codeChar, int delimiterCode, int lineNumber);
 };
 
 #endif //SYNTAX_ANALYZER_H_

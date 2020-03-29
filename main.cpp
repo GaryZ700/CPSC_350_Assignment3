@@ -37,6 +37,7 @@ int main(int argc, char** argv){
 		else
 			firstRun = false;
 
-		correctDelimiterSyntax = syntaxAnalyzer.Analyze(codeFile);		
+		correctDelimiterSyntax = syntaxAnalyzer.Analyze(codeFile);
+		codeFile.close();		
 	}while(correctDelimiterSyntax && input.GetBool(kRepeatProgram, kYes, kNo));
 }
