@@ -17,6 +17,7 @@
 	9.)  menu.cpp
 	10.) user_input.cpp
 	11.) syntax_analyzer.cpp
+	12.) main.cpp
 	
 
 3. Description of any known compile/runtime errors:

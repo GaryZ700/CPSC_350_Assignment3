@@ -29,7 +29,6 @@ class Menu{
 		static const string CLR_SCR;
 
 	private:
-
 		int precision;
 		vector<char> componetOrdering;
 		vector <string> text;
