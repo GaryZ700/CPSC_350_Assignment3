@@ -48,7 +48,7 @@ GenStack<T>::GenStack(int maxSize, int incrementSize){
 	if(maxSize < 1)
 		throw( new GenStackBadMaxSize() );
 	else if(incrementSize < 1)
-		throw( new GenStackBadIncrementSize );
+		throw( new GenStackBadIncrementSize() );
 
 	this->maxSize = maxSize;
 	this->incrementSize = incrementSize;

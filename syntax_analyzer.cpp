@@ -12,7 +12,7 @@ using namespace std;
 
 /*Syntax Analyzer Constructor*/
 SyntaxAnalyzer::SyntaxAnalyzer(){
-	this->leftDelimiters = new GenStack<char>;
+	this->leftDelimiters = new GenStack<char>();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -48,7 +48,7 @@ bool SyntaxAnalyzer::Analyze(fstream &codeFile){
 
 		correctSyntax = CoreLogic(codeChar, delimiterCode, lineNumber); 
 		
-	}while( correctSyntax && codeFile.get(codeChar));
+	}while(correctSyntax && codeFile.get(codeChar));
 
 	//Case where there is a starting delimiter with no ending delmiter, ex. Has '[' but missing ']'
 	if(correctSyntax && leftDelimiters->Size() > 0)
@@ -62,12 +62,12 @@ bool SyntaxAnalyzer::Analyze(fstream &codeFile){
 
 /*DelimiterSearch Method
   Has a void return
-  codeChar: pass by reference char that represents the code char to search for
-  delimiterCode: int that represents the type of delimiter found: 
+  codeChar: char that represents the code char to search for
+  delimiterCode: pass by reference int that represents the type of delimiter found: 
 	-1 = Invalid Delimiter 
 	 1 = Right Side Delimiter
 	 0 = Left Side Delimiter
-  index: pass by refernce integer that represents the location of the code char in the delimiters array*/
+  index: pass by refernce int that represents the location of the code char in the delimiters array*/
 void SyntaxAnalyzer::DelimiterSearch(char codeChar, int &delimiterCode, int &index){
 	
 	delimiterCode = -1;

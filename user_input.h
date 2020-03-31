@@ -2,7 +2,7 @@
    ID: 2321569 
    zeri@chapman.edu
    CPSC 350-02
-   Assignment 2: Syntax Checker
+   Assignment 3: Syntax Checker
 */
 
 #ifndef USER_INPUT_H_
